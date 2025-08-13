@@ -12,7 +12,7 @@ function CameraPanel() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 
                     grid-rows-4 sm:grid-rows-2 md:grid-rows-2 
-                    h-screen w-screen gap-[1px] bg-black">
+                    h-screen w-100vh gap-[2px] bg-black">
       {items.map((item) => (
         <div
           key={item.id}
