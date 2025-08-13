@@ -1,110 +1,85 @@
-// src/components/Navbar.tsx
-import { useState, useEffect, useRef } from "react";
-import { NavLink } from "react-router-dom";
-import { Button } from "./ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
-import { Menu } from "lucide-react";
+import { Eye, Home, Power, User } from "lucide-react";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
+import { useNavigate } from "react-router-dom";
 
 export function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const navbarRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (navbarRef.current && !navbarRef.current.contains(event.target as Node)) {
-        setMenuOpen(false);
-      }
-    };
+  const handleCameraClick = () => {
+    navigate('/CameraPanel'); 
+  };
 
-    const handleResize = () => {
-      if (window.innerWidth > 767) {
-        setMenuOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    window.addEventListener("resize", handleResize);
-    
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  const handleHomeClick = () => {
+    navigate('/Header'); 
+  };
 
   return (
-    <nav 
-      ref={navbarRef}
-      className="w-full px-4 py-3 bg-[#102b5b] text-white sticky top-0 z-50 shadow-sm"
-    >
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Mobile menu */}
-        <div className="lg:hidden">
-          <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
-                <Menu className="h-6 w-6" />
-                <span className="sr-only">{menuOpen ? "Close menu" : "Open menu"}</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="w-[70%] bg-[#102b5b] border-none">
-              <div className="flex flex-col space-y-4 pt-16 px-4">
-                {[
-                  { to: "/CameraPanel", text: "Video" },
-                  { to: "/", text: "Camera" },
-                  { to: "/", text: "Intelligent" },
-                  { to: "/Settings", text: "Settings" }
-                ].map((item) => (
-                  <NavLink
-                    key={item.to}
-                    to={item.to}
-                    className="text-white/80 hover:text-white py-2 hover:underline underline-offset-8"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    {item.text}
-                  </NavLink>
-                ))}
-              </div>
-            </SheetContent>
-          </Sheet>
-        </div>
-
-        {/* Brand name */}
-        <NavLink 
-          to="/" 
-          className="text-lg font-semibold whitespace-nowrap lg:ml-0 mx-auto lg:mx-0"
-          onClick={() => setMenuOpen(false)}
-        >
-          Employee Facial Detection
-        </NavLink>
-
-        {/* Desktop navigation */}
-        <div className="hidden lg:flex items-center space-x-6 mx-auto">
-          {[
-            { to: "/CameraPanel", text: "Video" },
-            { to: "/", text: "Camera" },
-            { to: "/", text: "Intelligent" },
-            { to: "/Settings", text: "Settings" }
-          ].map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              className={({ isActive }) => 
-                `text-white/80 hover:text-white pb-1 hover:underline underline-offset-8 transition-all
-                ${isActive ? "text-white underline" : ""}`
-              }
-            >
-              {item.text}
-            </NavLink>
-          ))}
-        </div>
-
-        {/* Logo */}
-        <div className="hidden lg:block">
+    <nav className="w-full px-4 py-2 bg-[#1C2C4A] text-white sticky top-0 z-50 shadow-sm">
+      <div className="flex justify-between items-center mx-auto max-w-7xl">
+        {/* Logo - visible on all screens but with different sizing */}
+        <div>
           <img 
             src="/IGDroneslogo.png" 
             alt="IG Drones Logo" 
-            className="h-10 w-auto" 
+            className="h-6 sm:h-8 w-auto"
           />
+        </div>
+        
+        {/* Icons container */}
+        <div className="flex gap-3 sm:gap-3">
+          <HoverCard>
+            <HoverCardTrigger>
+              <Eye 
+                size={24}
+                className="rounded-full bg-blue-200/30 border border-blue-400/50 p-0.5 sm:p-1 sm:size-6 cursor-pointer hover:bg-blue-100/40 transition-colors"
+                aria-label="Video"
+                onClick={handleCameraClick}
+              />
+            </HoverCardTrigger>
+            <HoverCardContent>
+              <h1 className="font-bold mb-2">Camera Panel</h1>
+              <p className="text-sm text-muted-foreground">
+                Click to view Camera Panel.
+              </p>
+            </HoverCardContent>
+          </HoverCard>
+
+          <HoverCard>
+            <HoverCardTrigger>
+              <Home
+                size={24}
+                className="rounded-full bg-blue-200/30 border border-blue-400/50 p-0.5 sm:p-1 sm:size-6 cursor-pointer hover:bg-blue-100/40 transition-colors"
+                aria-label="Home"
+                onClick={handleHomeClick}
+              />
+            </HoverCardTrigger>
+            <HoverCardContent>
+              <h1 className="font-bold mb-2">Main Menu</h1>
+              <p className="text-sm text-muted-foreground">
+                Click to view Menu.
+              </p>
+            </HoverCardContent>
+          </HoverCard>
+          
+          <HoverCard>
+            <HoverCardTrigger>
+              <User
+                size={24}
+                className="rounded-full bg-blue-200/30 border border-blue-400/50 p-0.5 sm:p-1 sm:size-6 cursor-pointer hover:bg-blue-100/40 transition-colors"
+                aria-label="Account"
+              />
+            </HoverCardTrigger>
+          </HoverCard>
+          
+          <HoverCard>
+            <HoverCardTrigger>
+              <Power 
+                size={24}
+                className="rounded-full bg-blue-200/30 border border-blue-400/50 p-0.5 sm:p-1 sm:size-6 cursor-pointer hover:bg-blue-100/40 transition-colors"
+                aria-label="Power"
+              />
+            </HoverCardTrigger>
+          </HoverCard>
         </div>
       </div>
     </nav>
